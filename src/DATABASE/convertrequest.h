@@ -14,22 +14,24 @@
 //Class executes a request to database and return the result.
 
 
-class ConveterData : public QObject
+class ConvertRequest : public QObject
 {
     Q_OBJECT
 public:
-    ConveterData(QSqlDatabase database, qintptr ID);
-    ~ConveterData();
+    ConvertRequest(QSqlDatabase database, qintptr ID);
+    ~ConvertRequest() override;
+
 signals:
     void readyToSend(QByteArray);
+
 public slots:
     void exec(QByteArray);
     void disconnected();
+
 private:
     // Confirming method sends a status of request. (Execute positive or negative)
     void C_Confirm(QString, QString errorCode=FLAG::ERR);
     QVector<QByteArray> C_UserPsswdDecoding(QByteArray);
-
 
     void C_LOGIN_DbRequest(QVector<QByteArray>);
 

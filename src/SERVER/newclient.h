@@ -5,8 +5,8 @@
 #include <QTcpSocket>
 #include <QThread>
 #include <QSqlDatabase>
-#include "src/DATABASE/conveterdata.h"
-#include "src/conf_define.h"
+#include "src/DATABASE/convertrequest.h"
+#include "src/config.h"
 
 //Class operates one new client, receives request and send response.
 
@@ -26,7 +26,7 @@ public slots:
 private:
     QTcpSocket *socket{nullptr};
     qintptr socketDescriptor;
-    ConveterData *conveterQuery{nullptr};
+    ConvertRequest *conveterQuery{nullptr};
 };
 
 #endif // NEWCONTACTSERVER_H

@@ -1,8 +1,8 @@
-#include "src\DATABASE\conveterdata.h"
+#include "src\DATABASE\convertrequest.h"
 
 using namespace FLAG;
 
-ConveterData::ConveterData(const QSqlDatabase base, qintptr ID)
+ConvertRequest::ConvertRequest(const QSqlDatabase base, qintptr ID)
 {
     this->_database = base;
     _result = false;
@@ -14,7 +14,7 @@ ConveterData::ConveterData(const QSqlDatabase base, qintptr ID)
 }
 
 
-void ConveterData::exec(QByteArray data)
+void ConvertRequest::exec(QByteArray data)
 {
     QByteArray header = getHeader(data);
     if(header == C_ULIST){
@@ -32,7 +32,7 @@ void ConveterData::exec(QByteArray data)
                             }
 }
 
-QByteArray ConveterData::getHeader(QByteArray data)
+QByteArray ConvertRequest::getHeader(QByteArray data)
 {
     if(data[0] == static_cast<char>(1) && data[data.length()-3]==static_cast<char>(30)){
          return data.mid(1,data.indexOf(static_cast<char>(2))-1);
@@ -43,7 +43,7 @@ QByteArray ConveterData::getHeader(QByteArray data)
 
 }
 
-QVector<QByteArray> ConveterData::C_UserPsswdDecoding(QByteArray data)
+QVector<QByteArray> ConvertRequest::C_UserPsswdDecoding(QByteArray data)
 {
     QByteArray nick =
             data.mid(data.indexOf(static_cast<char>(2))+1,
@@ -51,7 +51,7 @@ QVector<QByteArray> ConveterData::C_UserPsswdDecoding(QByteArray data)
     QByteArray password =
             data.mid(data.indexOf(static_cast<char>(3))+1,
                      data.indexOf(static_cast<char>(30))-data.indexOf(static_cast<char>(3))-1);
-    QVector<QByteArray> vec = *new QVector<QByteArray>(2);
+    QVector<QByteArray> vec(2);
     vec[0]=nick;
     vec[1]=password;
     qDebug() << vec.at(0) << endl;
@@ -59,7 +59,7 @@ QVector<QByteArray> ConveterData::C_UserPsswdDecoding(QByteArray data)
     return vec;
 }
 
-void ConveterData::C_LOGIN_DbRequest(QVector<QByteArray> vec){
+void ConvertRequest::C_LOGIN_DbRequest(QVector<QByteArray> vec){
     QSqlQuery request = _database.exec(
                 "SELECT ID_user,Nick,Password, s.ID_user "
                 "FROM Users LEFT NATURAL JOIN Logged s "
@@ -89,7 +89,7 @@ void ConveterData::C_LOGIN_DbRequest(QVector<QByteArray> vec){
             }
 }
 
-void ConveterData::C_Confirm(QString headerFlag, QString errorCode)
+void ConvertRequest::C_Confirm(QString headerFlag, QString errorCode)
 {
     QString resultToSend;
     if(_result){
@@ -103,7 +103,7 @@ void ConveterData::C_Confirm(QString headerFlag, QString errorCode)
     }
 }
 
-void ConveterData::C_SEND_decoding(QByteArray data)
+void ConvertRequest::C_SEND_decoding(QByteArray data)
 {
     QByteArray receiver =
             data.mid(data.indexOf(static_cast<char>(2))+1,
@@ -116,7 +116,7 @@ void ConveterData::C_SEND_decoding(QByteArray data)
     C_SEND_DbRequest(receiver,message);
 }
 
-void ConveterData::C_SEND_DbRequest(QByteArray nick, QByteArray message)
+void ConvertRequest::C_SEND_DbRequest(QByteArray nick, QByteArray message)
 {
     bool convertInt;
     int temp = nick.toInt(&convertInt);
@@ -152,7 +152,7 @@ void ConveterData::C_SEND_DbRequest(QByteArray nick, QByteArray message)
 }
 
 
-QMap<int,QString> ConveterData::C_ULIST_DbRequest()
+QMap<int,QString> ConvertRequest::C_ULIST_DbRequest()
 {
     if(!_database.isOpen())
         _database.open();
@@ -180,7 +180,7 @@ QMap<int,QString> ConveterData::C_ULIST_DbRequest()
     }
 
 }
-void ConveterData::C_ULIST_coding(QMap<int,QString> map)
+void ConvertRequest::C_ULIST_coding(QMap<int,QString> map)
 {
     QString resultToSend;
     if(!_result){
@@ -200,7 +200,7 @@ void ConveterData::C_ULIST_coding(QMap<int,QString> map)
     }
 }
 
-void ConveterData::C_GET_MSG_decoding(QByteArray data)
+void ConvertRequest::C_GET_MSG_decoding(QByteArray data)
 {
     QByteArray ID_User =
             data.mid(data.indexOf(static_cast<char>(2))+1,
@@ -208,7 +208,7 @@ void ConveterData::C_GET_MSG_decoding(QByteArray data)
     qDebug() << ID_User << endl;
     C_GET_MSG_DbRequest(ID_User);
 }
-void ConveterData::C_GET_MSG_DbRequest(QByteArray ID_User)
+void ConvertRequest::C_GET_MSG_DbRequest(QByteArray ID_User)
 {
     if(!_database.isOpen())
         _database.open();
@@ -242,7 +242,7 @@ void ConveterData::C_GET_MSG_DbRequest(QByteArray ID_User)
     }
 }
 
-void ConveterData::C_MESSAGES_coding(QByteArray sender, QByteArray message, QByteArray date)
+void ConvertRequest::C_MESSAGES_coding(QByteArray sender, QByteArray message, QByteArray date)
 {
     QString resultToSend;
     resultToSend = QLatin1Char(1) + S_GET_MSG + QLatin1Char(2) + sender
@@ -252,7 +252,7 @@ void ConveterData::C_MESSAGES_coding(QByteArray sender, QByteArray message, QByt
 
 }
 
-void ConveterData::C_REGISTER_DbRequest(QVector<QByteArray> vec)
+void ConvertRequest::C_REGISTER_DbRequest(QVector<QByteArray> vec)
 {
     QSqlQuery request = _database.exec(
                 "SELECT ID_user,Nick,Password FROM Users WHERE Nick='"+vec.at(0)+"';");
@@ -281,7 +281,7 @@ void ConveterData::C_REGISTER_DbRequest(QVector<QByteArray> vec)
 }
 
 
-void ConveterData::disconnected()
+void ConvertRequest::disconnected()
 {
     QString str =
             "DELETE FROM Logged "
@@ -295,7 +295,7 @@ void ConveterData::disconnected()
         qDebug() << ERROR << request.lastError().databaseText();
     }
 }
-ConveterData::~ConveterData()
+ConvertRequest::~ConvertRequest()
 {
     qDebug() << "Close DB";
     _database.close();

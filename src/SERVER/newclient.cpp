@@ -7,11 +7,11 @@ NewClient::NewClient(qintptr ID, QObject *parent) : QThread(parent)
         if(QSqlDatabase::contains(name)){
             QSqlDatabase database = QSqlDatabase::database(name);
             database.setDatabaseName(DATABASE_PATH);
-            this->conveterQuery = new ConveterData(database, ID);
+            this->conveterQuery = new ConvertRequest(database, ID);
         }else {
             QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE", name);
             database.setDatabaseName(DATABASE_PATH);
-        this->conveterQuery = new ConveterData(database, ID);
+        this->conveterQuery = new ConvertRequest(database, ID);
         }
 }
 

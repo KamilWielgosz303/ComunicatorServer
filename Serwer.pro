@@ -24,7 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/DATABASE/conveterdata.cpp \
+    src/DATABASE/convertrequest.cpp \
     src/SERVER/newclient.cpp \
         src/SERVER/server.cpp \
         main.cpp \
@@ -36,8 +36,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    src/DATABASE/conveterdata.h \
+    src/DATABASE/convertrequest.h \
     src/SERVER/newclient.h \
     src/SERVER/server.h \
-    src/conf_define.h \ \
+    \ \
+    src/config.h \
     src/conststaticflags.h

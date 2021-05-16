@@ -8,7 +8,7 @@
 #include <QTcpServer>
 #include <QDebug>
 #include "src/SERVER/newclient.h"
-#include "src/conf_define.h"
+#include "src/config.h"
 
 class Server : public QTcpServer
 {
