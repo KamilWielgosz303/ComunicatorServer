@@ -1,4 +1,4 @@
-#include "HEAD/SERVER/server.h"
+#include "src/SERVER/server.h"
 
 
 
@@ -15,7 +15,7 @@ void Server::incomingConnection(qintptr socketDescriptor)
 {
     qDebug() << socketDescriptor << " Connecting...\r\n";
 
-    thread = new NewContactServer(socketDescriptor, this);
+    thread = new NewClient(socketDescriptor, this);
 
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     thread->start();

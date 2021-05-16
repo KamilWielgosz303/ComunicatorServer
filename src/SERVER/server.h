@@ -7,22 +7,23 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include <QDebug>
-#include "HEAD/SERVER/newcontactserver.h"
-#include "HEAD/conf_define.h"
+#include "src/SERVER/newclient.h"
+#include "src/conf_define.h"
 
 class Server : public QTcpServer
 {
     Q_OBJECT
 public:
     explicit Server(quint16 port=50000, QObject *parent = nullptr);
-    ~Server();
+    ~Server() override;
     QTcpSocket *socket ;
     void startServer();
-    void incomingConnection(qintptr socketDescriptor);
-public slots:
-signals:
+    void incomingConnection(qintptr socketDescriptor) override;
+
 private:
     void clearLoggedTable();
+
+    NewClient *thread;
 };
 
 #endif // SERVER_H

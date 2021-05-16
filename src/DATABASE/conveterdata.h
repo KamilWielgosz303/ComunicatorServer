@@ -9,7 +9,7 @@
 #include <QMap>
 #include <QVector>
 
-#include "HEAD/conststaticflags.h"
+#include "src/conststaticflags.h"
 
 //Class executes a request to database and return the result.
 
@@ -30,7 +30,7 @@ private:
     void C_Confirm(QString, QString errorCode=FLAG::ERR);
     QVector<QByteArray> C_UserPsswdDecoding(QByteArray);
 
-    /////////////////////////////////////////////////////////////
+
     void C_LOGIN_DbRequest(QVector<QByteArray>);
 
     void C_SEND_DbRequest(QByteArray nick, QByteArray message);
@@ -48,8 +48,8 @@ private:
     QByteArray getHeader(QByteArray);
     bool _result;
     int _idUser;
-    QSqlQuery request;
-    QSqlDatabase database;
+    QSqlQuery _request;
+    QSqlDatabase _database;
 };
 
 #endif // HEAD\DATABASE\DATABASERESPONSE_H

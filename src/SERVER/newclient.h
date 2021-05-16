@@ -5,18 +5,18 @@
 #include <QTcpSocket>
 #include <QThread>
 #include <QSqlDatabase>
-#include "HEAD/DATABASE/conveterdata.h"
-#include "HEAD/conf_define.h"
+#include "src/DATABASE/conveterdata.h"
+#include "src/conf_define.h"
 
 //Class operates one new client, receives request and send response.
 
-class NewContactServer : public QThread
+class NewClient : public QThread
 {
     Q_OBJECT
 public:
-    explicit NewContactServer(qintptr ID, QObject *parent);
-    ~NewContactServer();
-    void run();
+    explicit NewClient(qintptr ID, QObject *parent);
+    ~NewClient() override;
+    void run() override;
 signals:
     void error(QTcpSocket::SocketError socketerror);
 public slots:

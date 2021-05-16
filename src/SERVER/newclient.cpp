@@ -1,6 +1,6 @@
-#include "HEAD/SERVER/newcontactserver.h"
+#include "src/SERVER/newclient.h"
 
-NewContactServer::NewContactServer(qintptr ID, QObject *parent) : QThread(parent)
+NewClient::NewClient(qintptr ID, QObject *parent) : QThread(parent)
 {
         this->socketDescriptor = ID;
         auto name = "my_db_" + QString::number((quint64)QThread::currentThread(), 16);
@@ -15,7 +15,7 @@ NewContactServer::NewContactServer(qintptr ID, QObject *parent) : QThread(parent
         }
 }
 
-NewContactServer::~NewContactServer()
+NewClient::~NewClient()
 {
     if(conveterQuery != nullptr)
         delete conveterQuery;
@@ -23,7 +23,7 @@ NewContactServer::~NewContactServer()
         delete socket;
 }
 
-void NewContactServer::run()
+void NewClient::run()
 {
     qDebug() << " Thread started" << endl;
 
@@ -44,7 +44,7 @@ void NewContactServer::run()
     exec();
 }
 
-void NewContactServer::readyRead()
+void NewClient::readyRead()
 {
     QByteArray becameData = socket->readAll();
     qDebug() << socketDescriptor << "Arrived data=" << endl;
@@ -52,14 +52,14 @@ void NewContactServer::readyRead()
     conveterQuery->exec(becameData);
 }
 
-void NewContactServer::writeToSocket(QByteArray dataToSend)
+void NewClient::writeToSocket(QByteArray dataToSend)
 {
     socket->waitForBytesWritten();
     socket->write(dataToSend);
     socket->flush();
 }
 
-void NewContactServer::disconnected()
+void NewClient::disconnected()
 {
     qDebug() << socketDescriptor << " Disconnected" << endl;
     conveterQuery->disconnected();

@@ -1,4 +1,4 @@
-#include "HEAD/SERVER/server.h"
+#include "src/SERVER/server.h"
 
 
 using namespace std;
